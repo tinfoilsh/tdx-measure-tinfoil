@@ -396,6 +396,7 @@ fn build_qemu_args(qemu: Option<&QemuShape>, cpus: u8, memory: &str) -> Vec<OsSt
             for v in &q.globals { push(&mut args, "-global", v); }
             for v in &q.objects { push(&mut args, "-object", v); }
             for v in &q.netdevs { push(&mut args, "-netdev", v); }
+            for v in &q.drives  { push(&mut args, "-drive", v); }
             for v in &q.devices { push(&mut args, "-device", v); }
             for v in &q.fw_cfg  { push(&mut args, "-fw_cfg", v); }
         }
@@ -894,9 +895,10 @@ mod tests {
             globals: vec!["q35-pcihost.pci-hole64-size=4096G".into()],
             objects: vec!["memory-backend-ram,id=mem0,size=16384M".into()],
             netdevs: vec!["hubport,id=net0,hubid=0".into()],
+            drives: vec!["file=/dev/null,if=none,id=disk0,format=raw,readonly=on".into()],
             devices: vec![
                 "e1000,netdev=net0,bus=pcie.0,addr=0x2,romfile=".into(),
-                "virtio-rng-pci".into(),
+                "virtio-blk-pci,drive=disk0".into(),
             ],
             fw_cfg: vec!["name=opt/ovmf/X-PciMmio64Mb,string=262144".into()],
         };
@@ -921,8 +923,9 @@ mod tests {
             "-global", "q35-pcihost.pci-hole64-size=4096G",
             "-object", "memory-backend-ram,id=mem0,size=16384M",
             "-netdev", "hubport,id=net0,hubid=0",
+            "-drive", "file=/dev/null,if=none,id=disk0,format=raw,readonly=on",
             "-device", "e1000,netdev=net0,bus=pcie.0,addr=0x2,romfile=",
-            "-device", "virtio-rng-pci",
+            "-device", "virtio-blk-pci,drive=disk0",
             "-fw_cfg", "name=opt/ovmf/X-PciMmio64Mb,string=262144",
         ]);
     }

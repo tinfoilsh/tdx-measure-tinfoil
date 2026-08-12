@@ -92,7 +92,8 @@ Create `metadata.json` file with the below metadata:
   - `globals`: list of strings, each emitted as `-global <value>`.
   - `objects`: list of strings, each emitted as `-object <value>`.
   - `netdevs`: list of strings, each emitted as `-netdev <value>`.
-  - `devices`: list of strings, each emitted as `-device <value>`. **Order is part of the API contract**: QEMU's PCI auto-slot assignment iterates `-device` arguments in command-line order and picks the lowest free slot, so `devices` must be authored in the same order as the reference launch you are mirroring. A `slot=N` argument on a `pcie-root-port` is only a hint and shifts if the slot is already taken by an earlier auto-assigned device. Order within `globals` / `objects` / `netdevs` / `fw_cfg` does not influence the ACPI tables.
+  - `drives`: list of strings, each emitted as `-drive <value>` before the device list. Use this for block backends referenced by PCI devices such as `virtio-blk-pci`.
+  - `devices`: list of strings, each emitted as `-device <value>`. **Order is part of the API contract**: QEMU's PCI auto-slot assignment iterates `-device` arguments in command-line order and picks the lowest free slot, so `devices` must be authored in the same order as the reference launch you are mirroring. A `slot=N` argument on a `pcie-root-port` is only a hint and shifts if the slot is already taken by an earlier auto-assigned device. Order within `globals` / `objects` / `netdevs` / `drives` / `fw_cfg` does not influence the ACPI tables.
   - `fw_cfg`: list of strings, each emitted as `-fw_cfg <value>`.
 
 - `direct`: Direct boot specific configuration used to compute RTMR[1] and RTMR[2]

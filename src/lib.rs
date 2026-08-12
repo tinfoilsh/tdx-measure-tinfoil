@@ -71,6 +71,8 @@ pub struct QemuShape {
     #[serde(default)]
     pub netdevs: Vec<String>,
     #[serde(default)]
+    pub drives: Vec<String>,
+    #[serde(default)]
     pub devices: Vec<String>,
     #[serde(default)]
     pub fw_cfg: Vec<String>,
